@@ -14,19 +14,22 @@ def get_data(**kwargs):
         json_data = df.to_json(orient='records')
         kwargs['ti'].xcom_push(key='data', value=json_data)
     else:
-        raise f"Failed to get data, HTTP status code: {response.status_code}"
-
+        raise Exception(f"Failed to get data, HTTP status code: {response.status_code}")
 
 def preview_data(**kwargs):
-    json_data = kwargs['ti'].xcom_pull(key='data')
-    data = json.loads(json_data)
+    data = kwargs['ti'].xcom_pull(key='data', task_ids='get_data')
+    print(data)
+
+    if data:
+        data = json.loads(data)
+    else:
+        raise ValueError("No data received from XCom")
+
     df = pd.DataFrame(data)
     df['Total'] = df['Price'] * df['Quantity']
-    print(1, df)
-    df.groupby('Category').agg({'Price': 'sum', 'Quantity': 'sum', 'Total': 'sum'})
-    print(2, df)
-
-    print(3, df[['Category', 'Total']])
+    df = df.groupby('Category', as_index=False).agg({'Total': 'sum'})
+    df = df.sort_values(by='Total', ascending=False)
+    print(df[['Category', 'Total']].head(20))
 
 default_args = {
     'owner': 'tricao',
