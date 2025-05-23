@@ -41,7 +41,8 @@ dag = DAG(
     default_args=default_args,
     schedule=timedelta(days=1),
     catchup=False,
-    is_paused_upon_creation=False
+    is_paused_upon_creation=False,
+    max_active_runs=1
 )
 
 get_data = PythonOperator(
