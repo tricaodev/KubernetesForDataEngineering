@@ -27,7 +27,7 @@ def preview_data(**kwargs):
 
     df = pd.DataFrame(data)
     df['Total'] = df['Price'] * df['Quantity']
-    df = df.groupby('Category', as_index=False).agg({'Total': 'sum'})
+    df = df.groupby('Category').agg({'Total': 'sum'})
     df = df.sort_values(by='Total', ascending=False)
     print(df[['Category', 'Total']].head(20))
 
