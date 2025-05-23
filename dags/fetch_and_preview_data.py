@@ -22,11 +22,11 @@ def preview_data(**kwargs):
     data = json.loads(json_data)
     df = pd.DataFrame(data)
     df['Total'] = df['Price'] * df['Quantity']
-    print(df)
+    print(1, df)
     df.groupby('Category').agg({'Price': 'sum', 'Quantity': 'sum', 'Total': 'sum'})
-    print(df)
+    print(2, df)
 
-    print(df[['Category', 'Total']])
+    print(3, df[['Category', 'Total']])
 
 default_args = {
     'owner': 'tricao',
