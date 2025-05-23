@@ -22,7 +22,9 @@ def preview_data(**kwargs):
     data = json.loads(json_data)
     df = pd.DataFrame(data)
     df['Total'] = df['Price'] * df['Quantity']
+    print(df)
     df.groupby('Category').agg({'Price': 'sum', 'Quantity': 'sum', 'Total': 'sum'})
+    print(df)
 
     print(df[['Category', 'Total']])
 
