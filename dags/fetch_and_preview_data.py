@@ -1,3 +1,4 @@
+import json
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta, timezone
@@ -18,7 +19,8 @@ def get_data(**kwargs):
 
 def preview_data(**kwargs):
     json_data = kwargs['ti'].xcom_pull(key='data')
-    df = pd.DataFrame(json_data)
+    data = json.loads(json_data)
+    df = pd.DataFrame(data)
     df['Total'] = df['Price'] * df['Quantity']
     df.groupby('Category').agg({'Price': 'sum', 'Quantity': 'sum', 'Total': 'sum'})
 
