@@ -38,11 +38,13 @@ dag = DAG(
 )
 
 get_data = PythonOperator(
+    dag=dag,
     task_id="get_data",
     python_callable=get_data
 )
 
 preview_data = PythonOperator(
+    dag=dag,
     task_id="preview_data",
     python_callable=preview_data
 )
